@@ -1,2 +1,5 @@
-# Encrypt
-Some AES encryption examples
+# Libraries Needed
+
+pycryptodome
+pycryptodomex
+getpass

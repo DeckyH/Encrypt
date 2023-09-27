@@ -66,7 +66,7 @@ for file in files:
     if action == 'decrypt' and 'aes' in file and 'DS_Store' not in file:
         print("Decrypting", directory + '/' + file)
         pyAesCrypt.decryptFile(directory + "/" + file, directory + "/" + file[:-4], password, bufferSize)
-    elif action == 'encrypt' and 'aes' not in file and 'enc' not in file:
+    elif action == 'encrypt' and 'aes' not in file and 'enc' not in file and 'DS_Store' not in file:
         print("Encrypting", directory + '/' + file)
         pyAesCrypt.encryptFile(directory + "/" + file, directory + "/" + file + ".aes", password, bufferSize)
 

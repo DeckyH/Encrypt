@@ -1,0 +1,13 @@
+altgraph==0.17.3
+macholib==1.16.2
+packaging==23.0
+ply==3.11
+pycryptodome==3.17
+pycryptodomex==3.17
+pyinstaller==5.9.0
+pyinstaller-hooks-contrib==2023.1
+PyQt5==5.15.9
+PyQt5-Qt5==5.15.2
+PyQt5-sip==12.11.1
+sip==6.7.7
+toml==0.10.2

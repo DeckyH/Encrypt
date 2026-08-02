@@ -1,0 +1,4 @@
+# Development only. Not needed to run FileCrypt, and deliberately kept out
+# of requirements.txt so the offline bundle stays to a single dependency.
+-r requirements.txt
+pytest>=8.0

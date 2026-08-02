@@ -1,3 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
 
+# Never commit ciphertext or plaintext under test
+*.fc2
+*.enc
+*.part
+
+# Build output. Binaries are per-platform and get rebuilt, not versioned --
+# the 2023 repo carried 318 MB of macOS PyInstaller output that was useless
+# on Linux.
+build/
+dist/
+
+# macOS
+.DS_Store
+
+# local scratch, never part of the bundle
 cleanDir.py
 argvTest.py
+
+# NOTE: vendor/*.whl is deliberately NOT ignored. The wheels are committed
+# on purpose so the bundle installs on an air-gapped machine.

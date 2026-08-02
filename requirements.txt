@@ -1,0 +1,6 @@
+# Runtime dependencies. Deliberately one line long.
+#
+# The GUI uses tkinter, which ships with Python, so there is no GUI wheel
+# to install. On Debian/Raspberry Pi tkinter lives in the python3-tk system
+# package; on macOS with Homebrew it is python-tk@3.13.
+pycryptodome==3.23.0

@@ -7,6 +7,15 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
+# Substituted by `git archive` via .gitattributes export-subst. In a git
+# clone it stays literal, so fall back to asking git directly.
+REV='$Format:%h (%cs)$'
+case "$REV" in
+  *Format:*) REV="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)" ;;
+  *) REV="${REV#\$Format:}"; REV="${REV%\$}" ;;
+esac
+echo "FileCrypt install -- build ${REV}"
+
 PYTHON="${PYTHON:-}"
 if [ -z "$PYTHON" ]; then
   for c in python3 python3.13 python3.12 python3.11 python3.9; do

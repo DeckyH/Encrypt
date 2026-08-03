@@ -13,7 +13,14 @@ cd "$(dirname "$0")/.."
 say()  { printf '  %-22s %s\n' "$1" "$2"; }
 warn=0
 
-echo "FileCrypt target check"
+# Substituted by `git archive` via .gitattributes export-subst.
+REV='$Format:%h (%cs)$'
+case "$REV" in
+  *Format:*) REV="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)" ;;
+  *) REV="${REV#\$Format:}"; REV="${REV%\$}" ;;
+esac
+
+echo "FileCrypt target check -- build ${REV}"
 echo
 
 # ------------------------------------------------------------ the machine

@@ -1,0 +1,6 @@
+# Stamp the revision into scripts at `git archive` time, so a bundle that
+# has been copied to another machine can say which build it is. Without
+# this there is no way to tell two extracted copies apart, which has
+# already caused one round of debugging the wrong version.
+install.sh          export-subst
+tools/check-target.sh export-subst

@@ -59,9 +59,45 @@ for plat in "${PLATFORMS[@]}"; do
   fi
 done
 
+# 32-bit ARM (armv7l) has no wheel on PyPI. piwheels is the Raspberry Pi
+# Foundation's index of ARM wheels built from the official PyPI sources --
+# it is the default extra index on Raspberry Pi OS. Needs the ABI spelled
+# out because these are not manylinux-tagged.
+#
+# Note this is a third-party rebuild: upstream publishes no armv7l wheel,
+# so the compiled .so files come from piwheels rather than the pycryptodome
+# maintainers. The Python sources in it are byte-identical to the official
+# sdist (verified), but the binaries are theirs. Drop this block if you
+# would rather compile from the bundled source archive on the Pi.
+printf '  %-24s ' "linux_armv7l (piwheels)"
+if "$PYTHON" -m pip download \
+      --dest vendor \
+      --only-binary=:all: \
+      --index-url https://www.piwheels.org/simple \
+      --platform linux_armv7l \
+      --python-version 39 --implementation cp --abi cp39 \
+      --no-deps "pycryptodome==${PYCRYPTODOME_VERSION:-3.23.0}" >/dev/null 2>&1; then
+  echo "ok"
+else
+  echo "FAILED (Pi 32-bit userland will have to compile from source)"
+fi
+
+# Source archive plus its build dependencies, so a platform with no wheel
+# at all can still compile offline.
+printf '  %-24s ' "source + build deps"
+if "$PYTHON" -m pip download --dest vendor --no-binary=:all: --no-deps \
+      -r requirements.txt >/dev/null 2>&1 \
+   && "$PYTHON" -m pip download --dest vendor --only-binary=:all: \
+      --python-version 3.9 --platform any --no-deps \
+      setuptools wheel packaging >/dev/null 2>&1; then
+  echo "ok"
+else
+  echo "FAILED"
+fi
+
 echo
 echo "vendor/ now contains:"
-ls -1sh vendor/*.whl 2>/dev/null | sed 's/^/  /' || echo "  (nothing)"
+ls -1sh vendor/* 2>/dev/null | sed 's/^/  /' || echo "  (nothing)"
 
 if [ ${#failed[@]} -gt 0 ]; then
   echo

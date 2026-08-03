@@ -61,9 +61,44 @@ On an air-gapped Pi you need the `.deb` in advance. The CLI works without it.
 
 ### Raspberry Pi
 
-64-bit Raspberry Pi OS (`aarch64`) is covered by the committed wheels. 32-bit
-`armv7l` has no prebuilt pycryptodome wheel — you would need `build-essential`
-and a source build, done ahead of time.
+Both 64-bit and 32-bit Raspberry Pi OS are covered by the committed wheels.
+
+**`uname -m` cannot tell you which you have.** Raspberry Pi OS Bullseye runs
+a 64-bit kernel over a 32-bit userland on a Pi 4, so `uname -m` reports
+`aarch64` while Python is 32-bit `armv7l` and needs entirely different
+packages. Use:
+
+```sh
+getconf LONG_BIT        # 32 or 64 -- this is the answer that matters
+```
+
+`tools/check-target.sh` reports it correctly, along with everything else
+that decides whether the install will work.
+
+| Userland | Wheel | Source |
+|---|---|---|
+| 64-bit `aarch64` | `manylinux_2_17_aarch64` | PyPI |
+| 32-bit `armv7l` | `linux_armv7l` | piwheels |
+
+PyPI publishes no `armv7l` wheel for pycryptodome, so that one comes from
+[piwheels](https://www.piwheels.org), the Raspberry Pi Foundation's ARM wheel
+index and the default extra index on Raspberry Pi OS. It is a third-party
+rebuild: the Python sources in it are byte-identical to the official PyPI
+sdist, but the compiled `.so` files are built by piwheels rather than the
+pycryptodome maintainers.
+
+If you would rather not rely on that, `vendor/` also carries the official
+source archive and its build dependencies, so you can compile locally
+instead:
+
+```sh
+sudo apt install build-essential python3-dev
+rm vendor/*linux_armv7l.whl
+./install.sh
+```
+
+Debian also packages it directly (`sudo apt install python3-pycryptodome`);
+`install.sh` will pick that up and use it rather than compiling.
 
 ---
 

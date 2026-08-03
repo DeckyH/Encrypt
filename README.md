@@ -81,10 +81,21 @@ confirmed before encrypting, because nothing can detect a typo afterwards.
 ### Command line
 
 ```sh
-python3 -m filecrypt encrypt ~/Documents/private
-python3 -m filecrypt encrypt ~/Documents/private -r      # subfolders too
-python3 -m filecrypt decrypt ~/Documents/private
-python3 -m filecrypt encrypt report.pdf                  # single file
+./venv/bin/python -m filecrypt encrypt ~/Documents/private
+./venv/bin/python -m filecrypt encrypt ~/Documents/private -r   # subfolders
+./venv/bin/python -m filecrypt decrypt ~/Documents/private
+./venv/bin/python -m filecrypt encrypt report.pdf               # single file
+```
+
+`./venv/bin/python`, not a bare `python3`. The dependency is installed
+inside `venv/`, so the system Python will fail with
+`ModuleNotFoundError: No module named 'Crypto'`.
+
+To drop the prefix, activate the environment first:
+
+```sh
+source venv/bin/activate
+python -m filecrypt encrypt ~/Documents/private
 ```
 
 Useful flags: `-r/--recursive`, `-v/--verbose` (shows what was skipped and
@@ -102,7 +113,7 @@ Files from the 2021 version use a different, unauthenticated format. They
 are still readable, and `migrate` rewrites them:
 
 ```sh
-python3 -m filecrypt migrate ~/old-archive
+./venv/bin/python -m filecrypt migrate ~/old-archive
 ```
 
 It asks for the old password and salt, then the new ones, and writes `.fc2`
